@@ -1,0 +1,135 @@
+{
+  "schema": "aml-ai-task-catalog-1",
+  "tasks": [
+    {
+      "id": "inventory",
+      "title": "Inventory manager",
+      "app": "inventory",
+      "model": "Product",
+      "resource": "products",
+      "page": "Inventory",
+      "fields": [
+        { "name": "name", "type": "Text", "first": "Widget", "second": "Gadget", "updated": "Widget Pro" },
+        { "name": "quantity", "type": "Int", "first": 3, "second": 4, "updated": 8 },
+        { "name": "active", "type": "Bool", "first": true, "second": false, "updated": false }
+      ]
+    },
+    {
+      "id": "issues",
+      "title": "Issue tracker",
+      "app": "issue_tracker",
+      "model": "Issue",
+      "resource": "issues",
+      "page": "Issues",
+      "fields": [
+        { "name": "title", "type": "Text", "first": "Broken link", "second": "Slow search", "updated": "Broken footer link" },
+        { "name": "priority", "type": "Int", "first": 2, "second": 1, "updated": 3 },
+        { "name": "resolved", "type": "Bool", "first": false, "second": false, "updated": true }
+      ]
+    },
+    {
+      "id": "contacts",
+      "title": "Contact directory",
+      "app": "contacts",
+      "model": "Contact",
+      "resource": "contacts",
+      "page": "Contacts",
+      "fields": [
+        { "name": "name", "type": "Text", "first": "Ada Lovelace", "second": "Grace Hopper", "updated": "Ada King" },
+        { "name": "email", "type": "Text", "first": "ada@example.test", "second": "grace@example.test", "updated": "ada.king@example.test" },
+        { "name": "favorite", "type": "Bool", "first": true, "second": false, "updated": false }
+      ]
+    },
+    {
+      "id": "expenses",
+      "title": "Expense ledger",
+      "app": "expenses",
+      "model": "Expense",
+      "resource": "expenses",
+      "page": "Expenses",
+      "fields": [
+        { "name": "description", "type": "Text", "first": "Train ticket", "second": "Team lunch", "updated": "Express train ticket" },
+        { "name": "amount", "type": "Float", "first": 42.5, "second": 81.25, "updated": 55.75 },
+        { "name": "reimbursed", "type": "Bool", "first": false, "second": true, "updated": true }
+      ]
+    },
+    {
+      "id": "events",
+      "title": "Event planner",
+      "app": "events",
+      "model": "Event",
+      "resource": "events",
+      "page": "Events",
+      "fields": [
+        { "name": "title", "type": "Text", "first": "Launch", "second": "Retrospective", "updated": "Product launch" },
+        { "name": "starts_at", "type": "Time", "first": "2030-01-02T15:00:00Z", "second": "2030-02-03T16:30:00Z", "updated": "2030-01-02T16:00:00Z" },
+        { "name": "capacity", "type": "Int", "first": 50, "second": 12, "updated": 75 }
+      ]
+    },
+    {
+      "id": "habits",
+      "title": "Habit tracker",
+      "app": "habits",
+      "model": "Habit",
+      "resource": "habits",
+      "page": "Habits",
+      "fields": [
+        { "name": "name", "type": "Text", "first": "Walk", "second": "Read", "updated": "Morning walk" },
+        { "name": "streak", "type": "Int", "first": 7, "second": 3, "updated": 8 },
+        { "name": "active", "type": "Bool", "first": true, "second": true, "updated": false }
+      ]
+    },
+    {
+      "id": "library",
+      "title": "Library catalog",
+      "app": "library",
+      "model": "Book",
+      "resource": "books",
+      "page": "Library",
+      "fields": [
+        { "name": "title", "type": "Text", "first": "The Compiler", "second": "Systems", "updated": "The AML Compiler" },
+        { "name": "author", "type": "Text", "first": "A. Author", "second": "B. Writer", "updated": "A. Engineer" },
+        { "name": "pages", "type": "Int", "first": 240, "second": 320, "updated": 256 }
+      ]
+    },
+    {
+      "id": "orders",
+      "title": "Order manager",
+      "app": "orders",
+      "model": "Order",
+      "resource": "orders",
+      "page": "Orders",
+      "fields": [
+        { "name": "customer", "type": "Text", "first": "Northwind", "second": "Contoso", "updated": "Northwind Labs" },
+        { "name": "total", "type": "Float", "first": 199.95, "second": 75.5, "updated": 225.25 },
+        { "name": "fulfilled", "type": "Bool", "first": false, "second": true, "updated": true }
+      ]
+    },
+    {
+      "id": "devices",
+      "title": "Device registry",
+      "app": "devices",
+      "model": "Device",
+      "resource": "devices",
+      "page": "Devices",
+      "fields": [
+        { "name": "name", "type": "Text", "first": "Gateway", "second": "Sensor", "updated": "Main gateway" },
+        { "name": "serial", "type": "Text", "first": "GW-100", "second": "SN-200", "updated": "GW-101" },
+        { "name": "online", "type": "Bool", "first": true, "second": false, "updated": false }
+      ]
+    },
+    {
+      "id": "jobs",
+      "title": "Job board",
+      "app": "jobs",
+      "model": "Job",
+      "resource": "jobs",
+      "page": "Jobs",
+      "fields": [
+        { "name": "title", "type": "Text", "first": "Compiler engineer", "second": "Designer", "updated": "Senior compiler engineer" },
+        { "name": "openings", "type": "Int", "first": 2, "second": 1, "updated": 3 },
+        { "name": "remote", "type": "Bool", "first": true, "second": false, "updated": true }
+      ]
+    }
+  ]
+}

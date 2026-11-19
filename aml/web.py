@@ -1,0 +1,232 @@
+"""Complete Vite + React project generation for AML web applications."""
+
+from __future__ import annotations
+
+import json
+import re
+
+from .compiler import CompileError, NAME, TYPE_MAP
+from .react import compile_react
+
+
+REACT_VERSION = "19.3.1"
+VITE_VERSION = "8.3.8"
+VITE_REACT_VERSION = "6.3.0"
+
+
+def _identity(source: str) -> tuple[str, str, list[tuple[str, str]]]:
+    app = re.search(rf"^app\s+({NAME})\s*$", source, re.MULTILINE)
+    component = re.search(
+        rf"^component\s+({NAME})(?:\((.*?)\))?:\s*$", source, re.MULTILINE
+    )
+    if not app or not component:
+        raise CompileError("web application requires an app and component", 1)
+    props: list[tuple[str, str]] = []
+    if component.group(2):
+        for raw_prop in component.group(2).split(","):
+            match = re.fullmatch(rf"\s*({NAME})\s*:\s*({NAME})\s*", raw_prop)
+            if not match or match.group(2) not in TYPE_MAP:
+                raise CompileError("invalid component prop in web application", 1)
+            props.append((match.group(1), match.group(2)))
+    return app.group(1), component.group(1), props
+
+
+def _sample_prop(name: str, type_name: str) -> str:
+    if type_name == "Text":
+        return json.dumps(f"AML {name.replace('_', ' ')}")
+    if type_name == "Int":
+        return "0"
+    if type_name == "Float":
+        return "0.0"
+    if type_name == "Bool":
+        return "false"
+    return "null"
+
+
+def _app_element(props: list[tuple[str, str]]) -> str:
+    if not props:
+        return "<App />"
+    rendered = " ".join(
+        f"{name}={{{_sample_prop(name, type_name)}}}" for name, type_name in props
+    )
+    return f"<App {rendered} />"
+
+
+def web_project_files(source: str, filename: str = "<memory>") -> dict[str, str]:
+    """Return a complete, installable web project as relative-path contents."""
+    app_name, component_name, props = _identity(source)
+    component = compile_react(source, filename)
+    package_name = app_name.lower().replace("_", "-")
+    title = app_name.replace("_", " ").title()
+    package = {
+        "name": package_name,
+        "private": True,
+        "version": "0.0.0",
+        "type": "module",
+        "scripts": {
+            "dev": "vite",
+            "build": "vite build",
+            "preview": "vite preview",
+        },
+        "dependencies": {
+            "react": f"^{REACT_VERSION}",
+            "react-dom": f"^{REACT_VERSION}",
+        },
+        "devDependencies": {
+            "@vitejs/plugin-react": f"^{VITE_REACT_VERSION}",
+            "vite": f"^{VITE_VERSION}",
+        },
+    }
+    main = f'''import {{ StrictMode }} from "react";
+import {{ createRoot }} from "react-dom/client";
+import App from "./App.jsx";
+import ErrorBoundary from "./ErrorBoundary.jsx";
+import "./styles.css";
+
+const root = document.getElementById("root");
+
+if (!root) {{
+  throw new Error("AML web root element was not found");
+}}
+
+createRoot(root).render(
+  <StrictMode>
+    <ErrorBoundary>
+      {_app_element(props)}
+    </ErrorBoundary>
+  </StrictMode>,
+);
+'''
+    error_boundary = '''import { Component } from "react";
+
+export default class ErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { error };
+  }
+
+  componentDidCatch(error, details) {
+    console.error("AML web application error", error, details);
+  }
+
+  render() {
+    if (this.state.error) {
+      return (
+        <main className="aml-error" role="alert">
+          <h1>Something went wrong</h1>
+          <p>{this.state.error.message}</p>
+        </main>
+      );
+    }
+    return this.props.children;
+  }
+}
+'''
+    styles = '''
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #172033;
+  background: #f4f7fb;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button, input { font: inherit; }
+
+button {
+  border: 0;
+  border-radius: 0.65rem;
+  padding: 0.7rem 1rem;
+  color: white;
+  background: #3157d5;
+  cursor: pointer;
+}
+
+button:hover { background: #2546b7; }
+button:focus-visible, input:focus-visible { outline: 3px solid #8ba4ff; outline-offset: 2px; }
+
+input {
+  width: 100%;
+  border: 1px solid #bdc7da;
+  border-radius: 0.65rem;
+  padding: 0.7rem 0.8rem;
+  background: white;
+}
+
+#root {
+  width: min(100% - 2rem, 48rem);
+  margin: 0 auto;
+  padding: 4rem 0;
+}
+
+#root > * {
+  padding: 2rem;
+  border: 1px solid #dce3ef;
+  border-radius: 1rem;
+  background: white;
+  box-shadow: 0 1rem 3rem rgb(28 43 75 / 10%);
+}
+
+.aml-error { color: #8a1c1c; }
+'''.lstrip()
+    index_html = f'''<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="{title}, generated by AML" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+'''
+    vite_config = '''import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+
+export default defineConfig({
+  plugins: [react()],
+});
+'''
+    readme = f'''# {title}
+
+Generated from AML component `{component_name}`.
+
+```sh
+npm install
+npm run dev
+```
+
+Production build:
+
+```sh
+npm run build
+npm run preview
+```
+'''
+    return {
+        ".gitignore": "node_modules/\ndist/\n.env\n.env.*\n",
+        "README.md": readme,
+        "index.html": index_html,
+        "package.json": json.dumps(package, indent=2) + "\n",
+        "vite.config.js": vite_config,
+        "src/App.jsx": component,
+        "src/ErrorBoundary.jsx": error_boundary,
+        "src/main.jsx": main,
+        "src/styles.css": styles,
+    }
+

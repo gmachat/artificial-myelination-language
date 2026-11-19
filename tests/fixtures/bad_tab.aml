@@ -1,0 +1,4 @@
+app bad
+profile script
+task main:
+	show 1

@@ -1,0 +1,70 @@
+AML AI REFERENCE 0.8
+Goal: one obvious form, two-space indentation, deterministic defaults.
+
+CORE
+app name
+profile script|local|connected
+record Person:
+  name: Text
+  scores: List[Int]
+task greet(person: Person) -> Text:
+  require person.name != ""
+  ensure result != ""
+  let message = "Hello, " + person.name
+  if person.scores[0] > 0:
+    return message
+  else:
+    fail "invalid score"
+task main:
+  show greet({name: "Ada", scores: [42]})
+Types: Any Bool Float Int Text List[T] Optional[T] and named records.
+Packages: aml init DIR; aml add NAME PATH --project DIR; aml lock --project DIR
+New: aml new NAME --profile script|react|web|fullstack
+Agent: aml agent context --json
+Repair: aml diagnose FILE --json; aml agent repair-context FILE
+Test: put executable AML files in tests/; aml test tests --json
+MCP: aml mcp --project DIR; config: aml mcp --project DIR --print-config
+Build: aml build app.aml --target javascript
+Run: aml run app.aml
+Ruby: aml run app.aml --target ruby
+Go: aml run app.aml --target go
+Rust: aml run app.aml --target rust
+C: aml run app.aml --target c
+Java: aml run app.aml --target java
+C#: aml run app.aml --target csharp
+Swift: aml run app.aml --target swift
+Typed IR: aml build app.aml --target ir
+
+WEB
+app name
+profile react|web
+component Counter(title: Text):
+  state count: Int = 0
+  view:
+    column:
+      heading title
+      text "Count: {count}"
+      when count == 0:
+        text "Ready"
+      else:
+        text "Started"
+      button "Add":
+        on click:
+          set count = count + 1
+      input name
+
+Build: aml build app.aml --target web -o app
+Check: aml check app.aml --target web
+
+FULLSTACK
+profile fullstack
+data Game:
+  league: Text
+resource games: Game:
+  list
+  create
+page Dashboard at "/":
+  resource games
+Build: aml build app.aml --target fullstack -o app
+Never invent alternate AML syntax.
+

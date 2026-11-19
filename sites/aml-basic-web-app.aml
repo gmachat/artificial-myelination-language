@@ -1,0 +1,17 @@
+app aml_basic_web_app
+profile web
+
+component FocusBoard:
+  state completed: Int = 0
+  state focus: Text = ""
+
+  view:
+    column:
+      heading "AML Focus Board"
+      text "A basic web app written in AML and compiled to React."
+      text "Tasks completed: {completed}"
+      button "Complete a task":
+        on click:
+          set completed = completed + 1
+      input focus
+      text "Current focus: {focus}"

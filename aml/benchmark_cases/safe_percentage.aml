@@ -1,0 +1,12 @@
+app safe_percentage
+profile script
+
+task percentage(part: Float, whole: Float) -> Float:
+  require whole > 0
+  require part >= 0
+  ensure result >= 0 and result <= 100
+  return part / whole * 100
+
+task main:
+  show percentage(25.0, 100.0)
+

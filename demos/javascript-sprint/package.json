@@ -1,0 +1,9 @@
+{
+  "name": "aml-javascript-sprint-demo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "demo": "node build/app.js",
+    "test": "node test.mjs"
+  }
+}

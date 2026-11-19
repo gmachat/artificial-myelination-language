@@ -1,0 +1,7 @@
+app module_demo
+profile script
+
+use "math.aml"
+
+task main:
+  show double(21)

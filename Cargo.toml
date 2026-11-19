@@ -1,0 +1,16 @@
+[package]
+name = "aml-language"
+version = "0.8.0-dev.0"
+edition = "2021"
+description = "Artificial Myelination Language compiler"
+license = "MIT"
+
+[[bin]]
+name = "aml"
+path = "src/main.rs"
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true
+

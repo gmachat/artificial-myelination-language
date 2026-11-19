@@ -1,0 +1,14 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "AML",
+  "scopeName": "source.aml",
+  "patterns": [
+    { "name": "comment.line.number-sign.aml", "match": "#.*$" },
+    { "name": "string.quoted.double.aml", "begin": "\"", "end": "\"", "patterns": [{ "name": "constant.character.escape.aml", "match": "\\\\." }] },
+    { "name": "keyword.control.aml", "match": "\\b(app|profile|use|task|data|resource|page|view|if|else|when|return|require|ensure|let|set|show|on|at|storage)\\b" },
+    { "name": "storage.type.aml", "match": "\\b(Any|Bool|Float|Int|Text|Time|List|Optional)\\b" },
+    { "name": "constant.language.aml", "match": "\\b(true|false|none)\\b" },
+    { "name": "constant.numeric.aml", "match": "\\b\\d+(?:\\.\\d+)?\\b" }
+  ]
+}
+

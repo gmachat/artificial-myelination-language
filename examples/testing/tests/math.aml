@@ -1,0 +1,11 @@
+app math_test
+profile script
+
+task double(value: Int) -> Int:
+  return value * 2
+
+task verify_double:
+  require double(21) == 42
+
+task main:
+  verify_double()

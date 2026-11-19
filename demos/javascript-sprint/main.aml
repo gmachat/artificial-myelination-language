@@ -1,0 +1,42 @@
+app javascript_sprint
+profile script
+
+record WorkItem:
+  title: Text
+  points: Int
+  complete: Bool
+  owner: Optional[Text]
+
+task earned(item: WorkItem) -> Int:
+  require item.points >= 0
+  ensure result >= 0
+  if item.complete:
+    return item.points
+  else:
+    return 0
+
+task assignment(item: WorkItem) -> Text:
+  if item.owner == none:
+    return "unassigned"
+  else:
+    return "assigned"
+
+task first_priority(priorities: List[Int]) -> Int:
+  require priorities[0] >= 0
+  return priorities[0]
+
+task main:
+  let design = {title: "Design AI workflow", points: 5, complete: true, owner: "Greg"}
+  let compiler = {title: "Build compiler", points: 8, complete: false, owner: none}
+  let total = earned(design) + earned(compiler)
+  let priorities = [5, 8]
+
+  show "AML Sprint Demo"
+  show design.title
+  show assignment(design)
+  show earned(design)
+  show compiler.title
+  show assignment(compiler)
+  show earned(compiler)
+  show total
+  show first_priority(priorities)

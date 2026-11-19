@@ -1,0 +1,4 @@
+module math
+
+task double(value: Int) -> Int:
+  return value * 2

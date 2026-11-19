@@ -1,0 +1,58 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  native:
+    name: native (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - run: cargo fmt --check
+      - run: cargo clippy --all-targets -- -D warnings
+      - run: cargo test
+      - run: cargo build --release --locked
+      - name: Installer smoke test
+        if: runner.os != 'Windows'
+        run: ./scripts/smoke-install.sh
+      - name: Installer smoke test (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $root = Join-Path $env:RUNNER_TEMP "aml-install-smoke"
+          New-Item -ItemType Directory -Force -Path $root | Out-Null
+          Copy-Item target/release/aml.exe,scripts/install.ps1 $root
+          & "$root/install.ps1" -InstallDir "$root/bin"
+          & "$root/bin/aml.exe" --version
+          & "$root/install.ps1" -InstallDir "$root/bin" -Uninstall
+          if (Test-Path "$root/bin/aml.exe") { throw "uninstall failed" }
+      - name: MCP protocol smoke test
+        run: node scripts/mcp-smoke.mjs
+      - name: AI workflow benchmark harness tests
+        if: runner.os != 'Windows'
+        run: node --test benchmarks/ai_workflow/*.test.mjs
+      - name: Native token benchmark
+        run: cargo run --locked -- benchmark --language javascript --json
+
+  compatibility:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m unittest discover -s tests
+

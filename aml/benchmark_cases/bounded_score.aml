@@ -1,0 +1,14 @@
+app bounded_score
+profile script
+
+task classify(score: Int) -> Text:
+  require score >= 0 and score <= 100
+  ensure result != ""
+  if score >= 80:
+    return "ready"
+  else:
+    return "keep learning"
+
+task main:
+  show classify(92)
+

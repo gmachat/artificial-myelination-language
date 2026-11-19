@@ -1,0 +1,14 @@
+app structured
+profile script
+
+record Person:
+  name: Text
+  scores: List[Int]
+  nickname: Optional[Text]
+
+task best(person: Person) -> Int:
+  return person.scores[0]
+
+task main:
+  let ada = {name: "Ada", scores: [42, 7], nickname: none}
+  show best(ada)

@@ -1,0 +1,10 @@
+app hello
+profile script
+
+task greet(name: Text) -> Text:
+  return "Hello, " + name + "!"
+
+task main:
+  let message = greet("AML")
+  show message
+

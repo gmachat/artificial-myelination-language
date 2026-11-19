@@ -1,0 +1,16 @@
+app production_dashboard
+profile fullstack
+storage postgres
+
+data Game:
+  starts_at: Time
+  edge: Float
+
+resource games: Game:
+  list
+  create
+  update
+  delete
+
+page Dashboard at "/":
+  resource games

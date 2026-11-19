@@ -1,0 +1,22 @@
+app aml_counter
+profile web
+
+component Counter(title: Text):
+  state count: Int = 0
+  state name: Text = ""
+  require title != ""
+
+  view:
+    column:
+      heading title
+      text "Count: {count}"
+      when count == 0:
+        text "Ready to begin"
+      else:
+        text "Nice work"
+      button "Add one":
+        on click:
+          set count = count + 1
+      input name
+      text "Hello, {name}"
+

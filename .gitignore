@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.venv/
+build/
+dist/
+target/
+release/
+*.egg-info/
+editors/vscode/node_modules/
+editors/vscode/dist/
+editors/vscode/*.vsix
+benchmarks/ai_workflow/runs/
+benchmarks/ai_workflow/.env.openai
+sites/aml-basic-web-app/
+sites/*.tar.gz

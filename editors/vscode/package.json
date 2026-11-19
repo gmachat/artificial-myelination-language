@@ -1,0 +1,38 @@
+{
+  "name": "aml-language",
+  "displayName": "AML — Artificial Myelination Language",
+  "description": "Language support backed by the native AML language server",
+  "version": "0.1.0",
+  "publisher": "aml-language",
+  "license": "MIT",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Programming Languages"],
+  "activationEvents": ["onLanguage:aml"],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "languages": [{
+      "id": "aml", "aliases": ["AML", "aml"], "extensions": [".aml"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "aml", "scopeName": "source.aml", "path": "./syntaxes/aml.tmLanguage.json"
+    }],
+    "configuration": {
+      "title": "AML",
+      "properties": {
+        "aml.server.path": {
+          "type": "string", "default": "aml",
+          "description": "Path to the native AML executable."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "esbuild extension.js --bundle --platform=node --external:vscode --outfile=dist/extension.js",
+    "package": "npm run build && vsce package --no-dependencies"
+  },
+  "dependencies": { "vscode-languageclient": "^9.0.1" },
+  "devDependencies": { "@vscode/vsce": "^4.1.1", "esbuild": "^0.25.0" },
+  "overrides": { "minimatch": "^11.0.1" }
+}
+

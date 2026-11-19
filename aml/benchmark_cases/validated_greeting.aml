@@ -1,0 +1,11 @@
+app validated_greeting
+profile script
+
+task greet(name: Text) -> Text:
+  require name != ""
+  ensure result != ""
+  return "Hello, " + name + "!"
+
+task main:
+  show greet("AML")
+
