@@ -484,7 +484,9 @@ mod tests {
             "{}",
             String::from_utf8_lossy(&result.stderr)
         );
-        String::from_utf8(result.stdout).unwrap()
+        String::from_utf8(result.stdout)
+            .unwrap()
+            .replace("\r\n", "\n")
     }
 
     #[test]

@@ -399,6 +399,9 @@ mod tests {
     };
 
     fn parse(source: &str) {
+        if Command::new("swiftc").arg("--version").output().is_err() {
+            return;
+        }
         let nonce = SystemTime::now()
             .duration_since(UNIX_EPOCH)
             .unwrap()
@@ -463,7 +466,9 @@ mod tests {
             "{}",
             String::from_utf8_lossy(&result.stderr)
         );
-        String::from_utf8(result.stdout).unwrap()
+        String::from_utf8(result.stdout)
+            .unwrap()
+            .replace("\r\n", "\n")
     }
 
     #[test]

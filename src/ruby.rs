@@ -286,6 +286,11 @@ mod tests {
         let result = Command::new("ruby").arg(&path).output().unwrap();
         let _ = fs::remove_file(path);
         assert!(result.status.success());
-        assert_eq!(String::from_utf8(result.stdout).unwrap(), "Hello, Ruby\n");
+        assert_eq!(
+            String::from_utf8(result.stdout)
+                .unwrap()
+                .replace("\r\n", "\n"),
+            "Hello, Ruby\n"
+        );
     }
 }
