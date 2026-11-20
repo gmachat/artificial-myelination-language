@@ -28,10 +28,18 @@ pub fn digest(input: &[u8]) -> [u8; 32] {
         0x1f83d9ab,
         0x5be0cd19,
     ];
-    for chunk in data.chunks_exact(64) {
+    debug_assert_eq!(data.len() % 64, 0);
+    for chunk_start in (0..data.len()).step_by(64) {
+        let chunk = &data[chunk_start..chunk_start + 64];
         let mut w = [0u32; 64];
-        for (index, bytes) in chunk.chunks_exact(4).enumerate() {
-            w[index] = u32::from_be_bytes(bytes.try_into().unwrap());
+        for (index, word) in w[..16].iter_mut().enumerate() {
+            let start = index * 4;
+            *word = u32::from_be_bytes([
+                chunk[start],
+                chunk[start + 1],
+                chunk[start + 2],
+                chunk[start + 3],
+            ]);
         }
         for index in 16..64 {
             let s0 = w[index - 15].rotate_right(7)
