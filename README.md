@@ -2,7 +2,7 @@
 
 AML is an experimental, agent-native programming language. Its goal is to let
 AI coding agents express intent with fewer decisions, less boilerplate, and
-more predictable project navigation—while remaining readable to people.
+more predictable project navigation while remaining readable to people.
 
 This repository contains the runnable prototype. AML compiles to Python,
 JavaScript, Ruby, Go, Rust, C, Java, C#, Swift, React JSX, complete Vite web
@@ -62,7 +62,7 @@ protocol, and language server. It never invokes Python. See
 ### Legacy Python compatibility compiler
 
 The previous implementation remains temporarily available for parity testing.
-New installations should use the native archive. From a checked-out copy:
+New installations should use the native archive. From a checked out copy:
 
 ```sh
 python3 -m pip install .
